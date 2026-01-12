@@ -75,8 +75,8 @@ jobs:
           
           echo "Pushing chart: $(basename "$CHART_TGZ")"
           
-          # Push to GHCR OCI registry
-          helm push "$CHART_TGZ" oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/helm-charts
+          # Push to GHCR OCI registry (format: oci://registry/owner/chart-name)
+          helm push "$CHART_TGZ" oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.CHART_NAME }}
           
           echo "✅ Published chart: ${{ env.CHART_NAME }}:$VERSION"
 
@@ -97,20 +97,14 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           
           echo "#### Published Helm Chart:" >> $GITHUB_STEP_SUMMARY
-          echo "- \`oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/helm-charts/${{ env.CHART_NAME }}:$VERSION\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.CHART_NAME }}:$VERSION\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
           echo "### Usage" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Add the Helm repository:" >> $GITHUB_STEP_SUMMARY
+          echo "Add and use the Helm chart from OCI registry:" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
-          echo "helm repo add supabase oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/helm-charts" >> $GITHUB_STEP_SUMMARY
-          echo "helm repo update" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Install the chart:" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
-          echo "helm install my-supabase supabase/supabase --version $VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "helm install my-supabase oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.CHART_NAME }} --version $VERSION" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
